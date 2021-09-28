@@ -12,34 +12,23 @@ namespace FavouriteLinkWebApp
     public class Link
     {
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-        public string Tag { get; set; }
+        public string Id { get; set; } //URL
+        public string Group { get; set; } //Partition
         public string Name { get; set; }
-        public string Url { get; set; }
         public override string ToString() => JsonConvert.SerializeObject(this);
     }
     public class LinkClient
     {
-        private static string databaseId = "Links";
-        private static string containerId = "all";
-        private static Database database;
-        private static Container container;
-        private static CosmosClient cosmosClient = new CosmosClient(ConfigurationManager.AppSettings["accountEndpoint"], ConfigurationManager.AppSettings["accountKey"]);
-        public static async Task Main(string[] args)
+        private string databaseId = ConfigurationManager.AppSettings["databaseName"];
+        private string containerId = ConfigurationManager.AppSettings["containerName"];
+        private Database database;
+        private Container container;
+        private CosmosClient cosmosClient = new CosmosClient(ConfigurationManager.AppSettings["accountEndpoint"], ConfigurationManager.AppSettings["accountKey"]);
+
+        private async Task InitDbEnvironment()
         {
             database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
-            container = await database.CreateContainerIfNotExistsAsync(containerId, "/Tag");
-
-            var youtube = new Link() { Id = "1", Name = "youtube", Url = "https://youtube.com/", Tag = "Learning" };
-
-            await TryAddLink(youtube);
-            //await GetAllLinksAsync();
-
-            await ReplaceLinkItemAsync(youtube);
-            bool didDelete = await TryDeleteLink(youtube.Id, youtube.Tag);
-            //Console.WriteLine("Expect delete: true == " + didDelete);
-            // didDelete = await TryDeleteLink(youtube.Id, youtube.Tag);
-            // Console.WriteLine("Expect delete: false == " + didDelete);
+            container = await database.CreateContainerIfNotExistsAsync(containerId, "/Group");
         }
 
         /// <summary>
@@ -49,16 +38,17 @@ namespace FavouriteLinkWebApp
         /// <param name="link"></param>
         /// <returns>Returns true if it was added, false if it wasn't.</returns>
 
-        public static async Task<bool> TryAddLink(Link link)
+        public async Task<bool> TryAddLink(Link link)
         {
+            await InitDbEnvironment();
             try
             {
-                await container.ReadItemAsync<Link>(link.Id, new PartitionKey(link.Tag));
+                await container.ReadItemAsync<Link>(link.Id, new PartitionKey(link.Group));
                 return false;
             }
             catch (CosmosException ex)
             {
-                await container.CreateItemAsync<Link>(link, new PartitionKey(link.Tag));
+                await container.CreateItemAsync<Link>(link, new PartitionKey(link.Group));
                 return true;
             }
         }
@@ -69,8 +59,9 @@ namespace FavouriteLinkWebApp
         /// <param name="id">The id string of the link-object</param>
         /// <param name="partitionKeyValue">The tag value of the link-object</param>
         /// <returns></returns>
-        public static async Task<bool> TryDeleteLink(string id, string partitionKeyValue)
+        public async Task<bool> TryDeleteLink(string id, string partitionKeyValue)
         {
+            await InitDbEnvironment();
             try
             {
                 await container.ReadItemAsync<Link>(id, new PartitionKey(partitionKeyValue));
@@ -86,8 +77,9 @@ namespace FavouriteLinkWebApp
         /// <summary>
         /// Runs a query (using Azure Cosmos DB SQL syntax) against the container "all" and retrieves all links.
         /// </summary>
-        private static async Task<List<Link>> GetAllLinksAsync()
+        private async Task<List<Link>> GetAllLinksAsync()
         {
+            await InitDbEnvironment();
             QueryDefinition queryDefinition = new QueryDefinition("SELECT * FROM all");
             FeedIterator<Link> queryResultSetIterator = container.GetItemQueryIterator<Link>(queryDefinition);
 
@@ -107,17 +99,20 @@ namespace FavouriteLinkWebApp
         /// <summary>
         /// Replace an item in the container
         /// </summary>
-        private static async Task ReplaceLinkItemAsync(Link link)
+        private async Task ReplaceLinkItemAsync(Link link)
         {
-            ItemResponse<Link> linkResponse = await container.ReadItemAsync<Link>(link.Id, new PartitionKey(link.Tag));
+            await InitDbEnvironment();
+            ItemResponse<Link> linkResponse = await container.ReadItemAsync<Link>(link.Id, new PartitionKey(link.Group));
             var oldLink = linkResponse.Resource;
-            linkResponse = await container.ReplaceItemAsync<Link>(link, oldLink.Id, new PartitionKey(oldLink.Tag));
+            linkResponse = await container.ReplaceItemAsync<Link>(link, oldLink.Id, new PartitionKey(oldLink.Group));
         }
         /// <summary>
         /// Delete the database and dispose of the Cosmos Client instance
         /// </summary>
         private async Task DeleteDatabaseAndCleanupAsync()
         {
+            await InitDbEnvironment();
+
             DatabaseResponse databaseResourceResponse = await database.DeleteAsync();
             // Also valid: await this.cosmosClient.Databases["FamilyDatabase"].DeleteAsync();
 
