@@ -12,9 +12,9 @@ namespace FavouriteLinkWebApp
     public class Link
     {
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; } //URL
-        public string Group { get; set; } //Partition
         public string Name { get; set; }
+        public string Group { get; set; } //Partition
+        public string Url { get; set; }
         public override string ToString() => JsonConvert.SerializeObject(this);
     }
     public class LinkClient
@@ -43,7 +43,7 @@ namespace FavouriteLinkWebApp
             await InitDbEnvironment();
             try
             {
-                await container.ReadItemAsync<Link>(link.Id, new PartitionKey(link.Group));
+                await container.ReadItemAsync<Link>(link.Url, new PartitionKey(link.Group));
                 return false;
             }
             catch (CosmosException ex)
@@ -77,7 +77,7 @@ namespace FavouriteLinkWebApp
         /// <summary>
         /// Runs a query (using Azure Cosmos DB SQL syntax) against the container "all" and retrieves all links.
         /// </summary>
-        private async Task<List<Link>> GetAllLinksAsync()
+        public async Task<List<Link>> GetAllLinksAsync()
         {
             await InitDbEnvironment();
             QueryDefinition queryDefinition = new QueryDefinition("SELECT * FROM all");
@@ -99,12 +99,12 @@ namespace FavouriteLinkWebApp
         /// <summary>
         /// Replace an item in the container
         /// </summary>
-        private async Task ReplaceLinkItemAsync(Link link)
+        public async Task ReplaceLinkItemAsync(Link link)
         {
             await InitDbEnvironment();
-            ItemResponse<Link> linkResponse = await container.ReadItemAsync<Link>(link.Id, new PartitionKey(link.Group));
+            ItemResponse<Link> linkResponse = await container.ReadItemAsync<Link>(link.Url, new PartitionKey(link.Group));
             var oldLink = linkResponse.Resource;
-            linkResponse = await container.ReplaceItemAsync<Link>(link, oldLink.Id, new PartitionKey(oldLink.Group));
+            linkResponse = await container.ReplaceItemAsync<Link>(link, oldLink.Url, new PartitionKey(oldLink.Group));
         }
         /// <summary>
         /// Delete the database and dispose of the Cosmos Client instance

@@ -1,0 +1,15 @@
+@page
+@model AddLinkModel
+@{
+    ViewData["Title"] = "Add link";
+}
+
+<form method="post">
+    <label asp-for="link.Name">Name of Link:</label>
+    <input type="text" id="name" name="name"><br>
+    <label asp-for="link.Url">Url:</label>
+    <input type="text" id="url" name="url"><br>
+    <label asp-for="link.Group">Group:</label>
+    <input type="text" id="group" name="group"><br>
+    <input type="submit" value="Submit">
+</form>
