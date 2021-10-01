@@ -7,6 +7,6 @@
 <div>
     @foreach (var link in Model._links)
     {
-        <a href="@link.Url">@link.Name</a>
+        <a href="@link.Url" data="id=@(link.Id)&group=@(link.Group)">@link.Name</a>
     }
 </div>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,8 @@ namespace FavouriteLinkWebApp
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine(ConfigurationManager.AppSettings["databaseName"]);
+            Console.WriteLine(ConfigurationManager.AppSettings["Logging"]);
             CreateHostBuilder(args).Build().Run();
         }
 

@@ -4,26 +4,21 @@ using System.Configuration;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
-using Newtonsoft.Json;
 
 //https://docs.microsoft.com/en-us/azure/cosmos-db/sql/sql-api-get-started#next-steps
 namespace FavouriteLinkWebApp
 {
-    public class Link
-    {
-        [JsonProperty(PropertyName = "id")]
-        public string Name { get; set; }
-        public string Group { get; set; } //Partition
-        public string Url { get; set; }
-        public override string ToString() => JsonConvert.SerializeObject(this);
-    }
     public class LinkClient
     {
-        private string databaseId = ConfigurationManager.AppSettings["databaseName"];
-        private string containerId = ConfigurationManager.AppSettings["containerName"];
+        private static string accountEndpoint = Environment.GetEnvironmentVariable("accountEndpoint", EnvironmentVariableTarget.Process);
+        private static string accountKey = Environment.GetEnvironmentVariable("accountKey", EnvironmentVariableTarget.Process);
+
+        private static string databaseId = ConfigurationManager.AppSettings["databaseName"];
+        private static string containerId = ConfigurationManager.AppSettings["containerName"];
+
         private Database database;
         private Container container;
-        private CosmosClient cosmosClient = new CosmosClient(ConfigurationManager.AppSettings["accountEndpoint"], ConfigurationManager.AppSettings["accountKey"]);
+        private CosmosClient cosmosClient = new CosmosClient(accountEndpoint, accountKey);
 
         private async Task InitDbEnvironment()
         {
@@ -43,7 +38,7 @@ namespace FavouriteLinkWebApp
             await InitDbEnvironment();
             try
             {
-                await container.ReadItemAsync<Link>(link.Url, new PartitionKey(link.Group));
+                await container.ReadItemAsync<Link>(link.Id, new PartitionKey(link.Group));
                 return false;
             }
             catch (CosmosException ex)
