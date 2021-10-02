@@ -14,8 +14,6 @@ namespace FavouriteLinkWebApp
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine(ConfigurationManager.AppSettings["databaseName"]);
-            Console.WriteLine(ConfigurationManager.AppSettings["Logging"]);
             CreateHostBuilder(args).Build().Run();
         }
 
