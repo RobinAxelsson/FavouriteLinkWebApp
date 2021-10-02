@@ -1,6 +1,8 @@
 # Azure Functions localsettings file
 local.settings.json
 App.config
+.secrets
+*.secret
 
 .vscode/*
 !.vscode/settings.json
