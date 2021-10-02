@@ -1,6 +1,6 @@
 # Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
 
-version: '3.4'
+version: "3.4"
 
 services:
   favouritelinkwebapp:
@@ -10,3 +10,6 @@ services:
       dockerfile: src/LinkAsp/Dockerfile
     ports:
       - 5000:5000
+    environment:
+      - accountEndpoint=${accountEndpoint}
+      - accountKey=${accountKey}
