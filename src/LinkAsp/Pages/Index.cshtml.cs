@@ -12,7 +12,7 @@ namespace FavouriteLinkWebApp.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly LinkClient _linkClient;
-        public List<Link> _links = new();
+        public List<Link> _links = new List<Link>();
 
         public IndexModel(ILogger<IndexModel> logger, LinkClient linkClient)
         {

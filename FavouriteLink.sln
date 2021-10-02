@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D76C7C30-627
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FavouriteLinkWebApp", "src\LinkAsp\FavouriteLinkWebApp.csproj", "{609510C9-C61C-4A64-8518-34DBD7278FB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkTest", "src\LinkTest\LinkTest.csproj", "{9A1659ED-E769-4559-AB45-5EB44C412AF0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,21 +32,8 @@ Global
 		{609510C9-C61C-4A64-8518-34DBD7278FB6}.Release|x64.Build.0 = Release|Any CPU
 		{609510C9-C61C-4A64-8518-34DBD7278FB6}.Release|x86.ActiveCfg = Release|Any CPU
 		{609510C9-C61C-4A64-8518-34DBD7278FB6}.Release|x86.Build.0 = Release|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Debug|x64.Build.0 = Debug|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Debug|x86.Build.0 = Debug|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Release|x64.ActiveCfg = Release|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Release|x64.Build.0 = Release|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Release|x86.ActiveCfg = Release|Any CPU
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{609510C9-C61C-4A64-8518-34DBD7278FB6} = {D76C7C30-6272-4B1B-8F0C-EEB59CA7A03E}
-		{9A1659ED-E769-4559-AB45-5EB44C412AF0} = {D76C7C30-6272-4B1B-8F0C-EEB59CA7A03E}
 	EndGlobalSection
 EndGlobal
